@@ -1,3 +1,5 @@
+require 'io/console'
+
 class StringGame
 
   attr_accessor :name
@@ -24,62 +26,46 @@ class StringGame
   def dream (time)
       sleep(time)
   end
-  
-  def hidden_cursor (confimation)
+
+  def hidden_cursor (confirmation)
         if confirmation == 1
-             print "\e[?25l"
-        end
-        elsif confirmation == 0
-             print "\e[?25h"
-        end
-        else
-              puts "no hidden_cursor"
-        end
-  end
+            print "\e[?25l"
+       elsif confirmation == 0
+            print "\e[?25h"
+       elsif
+            print "Default"
+            # hacer algo en caso de que confirmation no sea ni 1 ni 0
+       end
+   end
   
   def attibute_text (color)
        if color == 0 #negro
             print "\e[30m"
             print "\e[0m"
-       end
-       
        elsif color == 1 #rojo
             print "\e[31m"
             print "\e[0m"
-       end
-       
-       if color == 2 #verde
+       elsif color == 2 #verde
             print "\e[32m"
             print "\e[0m"
-       end
-       
        elsif color == 3 #amarillo
             print "\e[33m"
             print "\e[0m"
-       end
-       
-       if color == 4 #azul
+       elsif color == 4 #azul
             print "\e[34m"
             print "\e[0m"
-       end
-       
        elsif color == 5 #morado
             print "\e[35m"
             print "\e[0m"
-       end
-       
-       if color == 6 #cyan
+       elsif color == 6 #cyan
             print "\e[36m"
             print "\e[0m"
-       end
-       
        elsif color == 7 #blanco
             print "\e[37m"
             print "\e[0m"
        end
-       
   end
-  
+
   def goto_xy (x,y)
        print "\e[#{y};#{x}H"
   end
@@ -105,6 +91,7 @@ class StringGame
        10.times do # repite el código 10 veces
        letter = (random.rand(26) + 65).chr # genera un número aleatorio entre 0 y 25 y lo convierte en una letra del abecedario
        puts letter # imprime la letra
+    end
   end
   
   def read_key
@@ -119,7 +106,6 @@ class StringGame
   def compare_str (str_1,str_2)
        if str_1 == str_2
            return true
-       end
        else
            return false
        end
@@ -137,6 +123,8 @@ class StringGame
       puts text # imprime el texto con un salto de línea al final
     else
       print text
+         end
+     end
   end
   
   def _clrscr
