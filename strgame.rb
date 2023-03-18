@@ -1,4 +1,6 @@
 require 'io/console'
+require 'sysinfo'
+require 'Win32API'
 
 class StringGame
 
@@ -134,5 +136,92 @@ class StringGame
          system("clear") # ejecuta el comando "clear" para limpiar la pantalla
       end
   end
+
+def generate_terrain_random(rows, cols)
+  terrain = Array.new(rows) { Array.new(cols, 0) }
+  srand(Time.now.to_i) # Inicializa el generador de números aleatorios
+
+  # Genera el terreno aleatorio
+  for i in 0...rows do
+    for j in 0...cols do
+      terrain[i][j] = rand(2) # Asigna un valor aleatorio de 0 o 1
+    end
+  end
+
+  # Imprime el terreno
+  for i in 0...rows do
+    for j in 0...cols do
+      if terrain[i][j] == 0
+        print "[&]"
+      else
+        print "[#]"
+      end
+    end
+    puts # Salto de línea para imprimir cada fila
+  end
+end
+
+def printC(cand_assets, *paint_assets)
+  paint_assets.each do |asset|
+    printf("%s", asset)
+  end
+end
+
+def colorRGBA(red, green, blue, alpha)
+  # Convierte los valores RGB y alpha en valores hexadecimales de 2 dígitos
+  red_hex = sprintf("%02X", red)
+  green_hex = sprintf("%02X", green)
+  blue_hex = sprintf("%02X", blue)
+  alpha_hex = sprintf("%02X", alpha)
+
+  # Imprime la secuencia de escape de ANSI para cambiar el color del texto
+  print "\e[38;2;#{red};#{green};#{blue};#{alpha}m"
+  # La secuencia "\e[" indica que se inicia una secuencia de escape de ANSI,
+  # "38;2;" indica que se va a cambiar el color del texto en lugar del fondo,
+  # seguido de los valores RGB y alpha en formato decimal separados por ";".
+  # "m" indica que se ha completado la secuencia de escape.
+end
+
+def show_hour
+  now = Time.now
+  puts "La hora actual es: #{now.strftime("%H:%M:%S")}"
+end
+
+def ram_view
+  info = Sys::Info::Mem.new
+  total_memoria = info.total_bytes / 1024 / 1024
+  memoria_libre = info.free_bytes / 1024 / 1024
+  memoria_usada = total_memoria - memoria_libre
+
+  puts "RAM total: #{total_memoria} MB"
+  puts "RAM libre: #{memoria_libre} MB"
+  puts "RAM usada: #{memoria_usada} MB"
+end
+
+def view_battery
+  get_system_power_status = Win32API.new("kernel32", "GetSystemPowerStatus", ["P"], "L")
+  power_status = "\0" * 12
+  if get_system_power_status.call(power_status) == 0
+    puts "Error: no se pudo obtener el estado de la batería."
+    return -1
+  end
+  
+  ac_line_status, battery_flag, battery_life_percent, reserved1, 
+    battery_life_time, battery_full_life_time = power_status.unpack("CCCCVV")
+    
+  if battery_life_percent != 255
+    puts "Porcentaje de batería: #{battery_life_percent}%"
+  else
+    puts "La batería no se encuentra presente."
+  end
+end
+
+def render_(num_functions, *functions)
+    while true do
+        functions.each do |function|
+            function.call
+        end
+    end
+end
 
 end
