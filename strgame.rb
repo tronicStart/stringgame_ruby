@@ -1,3 +1,4 @@
+#metodos creados por Tronic/TronicStart
 require 'io/console'
 require 'sysinfo'
 
@@ -184,35 +185,6 @@ end
 def show_hour
   now = Time.now
   puts "La hora actual es: #{now.strftime("%H:%M:%S")}"
-end
-
-def ram_view
-  info = Sys::Info::Mem.new
-  total_memoria = info.total_bytes / 1024 / 1024
-  memoria_libre = info.free_bytes / 1024 / 1024
-  memoria_usada = total_memoria - memoria_libre
-
-  puts "RAM total: #{total_memoria} MB"
-  puts "RAM libre: #{memoria_libre} MB"
-  puts "RAM usada: #{memoria_usada} MB"
-end
-
-def view_battery
-  get_system_power_status = Win32API.new("kernel32", "GetSystemPowerStatus", ["P"], "L")
-  power_status = "\0" * 12
-  if get_system_power_status.call(power_status) == 0
-    puts "Error: no se pudo obtener el estado de la batería."
-    return -1
-  end
-  
-  ac_line_status, battery_flag, battery_life_percent, reserved1, 
-    battery_life_time, battery_full_life_time = power_status.unpack("CCCCVV")
-    
-  if battery_life_percent != 255
-    puts "Porcentaje de batería: #{battery_life_percent}%"
-  else
-    puts "La batería no se encuentra presente."
-  end
 end
 
 def render_(num_functions, *functions)
