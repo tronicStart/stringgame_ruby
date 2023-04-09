@@ -1,6 +1,5 @@
 require 'io/console'
 require 'sysinfo'
-require 'Win32API'
 
 class StringGame
 
